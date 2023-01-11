@@ -1,25 +1,29 @@
 import {
   registerDecorator,
+  ValidationOptions,
+  ValidatorConstraintInterface,
   ValidationArguments,
   ValidatorConstraint,
-  ValidatorConstraintInterface,
-  ValidatorOptions,
 } from 'class-validator';
+import { Injectable } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 
+@Injectable()
 @ValidatorConstraint()
-class IsNomeDeUsuarioUnicoConstraint implements ValidatorConstraintInterface {
+export class IsNomeDeUsuarioUnicoConstraint
+  implements ValidatorConstraintInterface
+{
   constructor(private usuarioService: UsuarioService) {}
 
   validate(
-    nomeDeusuario: string,
+    nomeDeUsuario: string,
     validationArguments?: ValidationArguments,
   ): boolean | Promise<boolean> {
-    return !!!this.usuarioService.buscaPorNomeDeUsuario(nomeDeusuario);
+    return !!!this.usuarioService.buscaPorNomeDeUsuario(nomeDeUsuario);
   }
 }
 
-export function IsNomeDeUsuarioUnico(validationOptions?: ValidatorOptions) {
+export function IsNomeDeUsuarioUnico(validationOptions?: ValidationOptions) {
   // eslint-disable-next-line @typescript-eslint/ban-types
   return function (object: Object, propertyName: string) {
     registerDecorator({
